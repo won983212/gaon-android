@@ -5,4 +5,14 @@
         <item name="android:fontFamily">@font/app_font_default</item>
         <item name="android:textColor">@color/text</item>
     </style>
+
+    <!-- Button -->
+    <style name="Widget.Gaon.PasswordTextButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/app_regular</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:textColor">@color/text</item>
+    </style>
 </resources>
