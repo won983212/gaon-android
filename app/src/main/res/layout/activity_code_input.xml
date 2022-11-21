@@ -32,7 +32,7 @@
                 android:layout_marginBottom="4dp"
                 android:fontFamily="@font/app_semibold"
                 android:textSize="24sp"
-                tools:text="PC 연결 코드 입력" />
+                android:text="@string/code_input" />
 
             <LinearLayout
                 android:id="@+id/layout_password_indicator"
@@ -43,7 +43,7 @@
                 <RadioButton
                     android:layout_width="12dp"
                     android:layout_height="12dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="12dp"
                     android:background="@drawable/radio_btn_password"
                     android:button="@null"
                     android:enabled="false" />
@@ -51,7 +51,7 @@
                 <RadioButton
                     android:layout_width="12dp"
                     android:layout_height="12dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="12dp"
                     android:background="@drawable/radio_btn_password"
                     android:button="@null"
                     android:enabled="false" />
@@ -59,7 +59,7 @@
                 <RadioButton
                     android:layout_width="12dp"
                     android:layout_height="12dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="12dp"
                     android:background="@drawable/radio_btn_password"
                     android:button="@null"
                     android:enabled="false" />
@@ -67,7 +67,7 @@
                 <RadioButton
                     android:layout_width="12dp"
                     android:layout_height="12dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="12dp"
                     android:background="@drawable/radio_btn_password"
                     android:button="@null"
                     android:enabled="false" />
@@ -75,7 +75,7 @@
                 <RadioButton
                     android:layout_width="12dp"
                     android:layout_height="12dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="12dp"
                     android:background="@drawable/radio_btn_password"
                     android:button="@null"
                     android:enabled="false" />
