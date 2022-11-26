@@ -46,7 +46,7 @@
                     android:layout_marginEnd="12dp"
                     android:background="@drawable/radio_btn_password"
                     android:button="@null"
-                    android:enabled="false" />
+                    android:checked="false" />
 
                 <RadioButton
                     android:layout_width="12dp"
@@ -54,7 +54,7 @@
                     android:layout_marginEnd="12dp"
                     android:background="@drawable/radio_btn_password"
                     android:button="@null"
-                    android:enabled="false" />
+                    android:checked="false" />
 
                 <RadioButton
                     android:layout_width="12dp"
@@ -62,7 +62,7 @@
                     android:layout_marginEnd="12dp"
                     android:background="@drawable/radio_btn_password"
                     android:button="@null"
-                    android:enabled="false" />
+                    android:checked="false" />
 
                 <RadioButton
                     android:layout_width="12dp"
@@ -70,7 +70,7 @@
                     android:layout_marginEnd="12dp"
                     android:background="@drawable/radio_btn_password"
                     android:button="@null"
-                    android:enabled="false" />
+                    android:checked="false" />
 
                 <RadioButton
                     android:layout_width="12dp"
@@ -78,14 +78,14 @@
                     android:layout_marginEnd="12dp"
                     android:background="@drawable/radio_btn_password"
                     android:button="@null"
-                    android:enabled="false" />
+                    android:checked="false" />
 
                 <RadioButton
                     android:layout_width="12dp"
                     android:layout_height="12dp"
                     android:background="@drawable/radio_btn_password"
                     android:button="@null"
-                    android:enabled="false" />
+                    android:checked="false" />
             </LinearLayout>
         </LinearLayout>
 
