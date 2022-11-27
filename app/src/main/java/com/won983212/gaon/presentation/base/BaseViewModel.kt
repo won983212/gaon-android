@@ -69,16 +69,17 @@ open class BaseViewModel : ViewModel() {
      * Task가 실패했다면 로딩 완료 처리 및 오류 메시지를 띄운다. 성공했다면 로딩만 완료처리.
      * @return task가 성공했다면 결과 값, 아니면 null (즉 getOrNull)
      */
-    suspend fun <T> startProgressTask(task: suspend () -> Result<T>): T? {
-        setLoading(true)
-        val result = task()
-        setLoading(false)
-
-        result.onFailure {
-            showError(it.message ?: "오류가 발생했습니다.")
+    suspend fun <T> startProgressTask(task: suspend () -> T): T? {
+        return try {
+            setLoading(true)
+            task()
+        } catch (e: Throwable) {
+            e.printStackTrace()
+            showError(e.message ?: "오류가 발생했습니다.")
+            null
+        } finally {
+            setLoading(false)
         }
-
-        return result.getOrNull()
     }
 
     /**
@@ -87,22 +88,13 @@ open class BaseViewModel : ViewModel() {
      * Task가 실패했다면 오류 메시지를 띄운다. 성공했다면 아무런 처리도 안한다.
      * @return task가 성공했다면 결과 값, 아니면 null (즉 getOrNull)
      */
-    suspend fun <T> startResultTask(task: suspend () -> Result<T>): T? {
-        val result = task()
-        result.onFailure {
-            showError(it.message ?: "오류가 발생했습니다.")
+    suspend fun <T> startResultTask(task: suspend () -> T): T? {
+        return try {
+            task()
+        } catch (e: Throwable) {
+            e.printStackTrace()
+            showError(e.message ?: "오류가 발생했습니다.")
+            null
         }
-        return result.getOrNull()
-    }
-
-    /**
-     * Task 실행 중 **Loading처리**를 한다. (Viewmodel단에서 필요한 처리만)
-     * @return task의 결과 값
-     */
-    suspend fun <T> startTask(task: suspend () -> T): T {
-        setLoading(true)
-        val result = task()
-        setLoading(false)
-        return result
     }
 }

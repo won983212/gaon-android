@@ -1,5 +1,6 @@
 package com.won983212.gaon.presentation.view.code
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.RadioButton
 import androidx.activity.addCallback
@@ -7,7 +8,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import com.won983212.gaon.databinding.ActivityCodeInputBinding
+import com.won983212.gaon.presentation.view.voice.VoiceActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CodeInputActivity : AppCompatActivity() {
     private val viewModel by viewModels<CodeInputViewModel>()
 
@@ -36,6 +40,10 @@ class CodeInputActivity : AppCompatActivity() {
         viewModel.attachDefaultHandlers(this)
 
         viewModel.eventSuccess.observe(this) {
+            Intent(this, VoiceActivity::class.java).apply {
+                putExtra(VoiceActivity.EXTRA_CONNECTION_INFO, it)
+                startActivity(this)
+            }
             finish()
         }
 

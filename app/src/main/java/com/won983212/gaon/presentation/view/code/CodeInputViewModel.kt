@@ -1,12 +1,21 @@
 package com.won983212.gaon.presentation.view.code
 
+import androidx.lifecycle.viewModelScope
+import com.won983212.gaon.data.model.ConnectionInfo
+import com.won983212.gaon.data.repository.PairingRepository
 import com.won983212.gaon.presentation.base.BaseViewModel
 import com.won983212.gaon.presentation.util.SingleLiveEvent
 import com.won983212.gaon.presentation.util.asLiveData
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CodeInputViewModel : BaseViewModel(), PasswordInputListener {
+@HiltViewModel
+class CodeInputViewModel @Inject constructor(
+    private val pairingRepository: PairingRepository
+) : BaseViewModel(), PasswordInputListener {
 
-    private val _eventSuccess = SingleLiveEvent<Unit>()
+    private val _eventSuccess = SingleLiveEvent<ConnectionInfo>()
     val eventSuccess = _eventSuccess.asLiveData()
 
     private val _eventPwdIndicatorStateChanged = SingleLiveEvent<Pair<Int, Boolean>>()
@@ -27,7 +36,14 @@ class CodeInputViewModel : BaseViewModel(), PasswordInputListener {
     }
 
     override fun onPasswordInput(password: String) {
-        _eventSuccess.call()
+        viewModelScope.launch {
+            val result = startProgressTask {
+                pairingRepository.acceptInvite(password.toInt())
+            }
+            if (result != null) {
+                _eventSuccess.postValue(result!!)
+            }
+        }
     }
 
     fun appendCode(digit: Char) {
