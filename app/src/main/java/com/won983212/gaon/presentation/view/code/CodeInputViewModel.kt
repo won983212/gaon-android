@@ -8,6 +8,8 @@ import com.won983212.gaon.presentation.util.SingleLiveEvent
 import com.won983212.gaon.presentation.util.asLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,6 +21,7 @@ class CodeInputViewModel @Inject constructor(
     val eventSuccess = _eventSuccess.asLiveData()
 
     private val _eventPwdIndicatorStateChanged = SingleLiveEvent<Pair<Int, Boolean>>()
+    private var lock = Mutex()
 
     /**
      * **Parameter**: Pair<Index, CheckState>
@@ -37,11 +40,13 @@ class CodeInputViewModel @Inject constructor(
 
     override fun onPasswordInput(password: String) {
         viewModelScope.launch {
-            val result = startProgressTask {
-                pairingRepository.acceptInvite(password.toInt())
-            }
-            if (result != null) {
-                _eventSuccess.postValue(result!!)
+            lock.withLock {
+                val result = startProgressTask {
+                    pairingRepository.acceptInvite(password.toInt())
+                }
+                if (result != null) {
+                    _eventSuccess.postValue(result!!)
+                }
             }
         }
     }

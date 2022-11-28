@@ -23,25 +23,29 @@ internal class SocketPairingDataSource @Inject constructor() {
 
     private suspend fun <T> emit(
         event: String,
-        vararg params: Any,
-        onResponse: (json: JSONObject) -> T
+        vararg params: Any
     ) = suspendCoroutine {
         Log.d("SocketCall", "Call $event ${params.contentToString()}")
 
         mSocket.emit(event, params, object : AckWithTimeout(5000) {
             override fun onSuccess(vararg args: Any?) {
-                val response = args[0] as JSONObject
-                Log.d("SocketCall", "$event Response: $response")
-                if (response.has("error")) {
-                    val errorObj = response.get("error") as JSONObject
-                    val message = if (errorObj.has("message")) {
-                        errorObj.getString("message")
+                if (args[0] is JSONObject) {
+                    val response = args[0] as JSONObject
+                    Log.d("SocketCall", "$event Response: $response")
+                    if (response.has("error")) {
+                        val errorObj = response.get("error") as JSONObject
+                        val message = if (errorObj.has("message")) {
+                            errorObj.getString("message")
+                        } else {
+                            "No message"
+                        }
+                        it.resumeWithException(RequestCallError(message))
                     } else {
-                        "No message"
+                        it.resume(response as T)
                     }
-                    it.resumeWithException(RequestCallError(message))
                 } else {
-                    it.resume(onResponse(response))
+                    Log.d("SocketCall", "$event Response: ${args[0]}")
+                    it.resume(args[0] as T)
                 }
             }
 
@@ -55,17 +59,22 @@ internal class SocketPairingDataSource @Inject constructor() {
     }
 
     suspend fun acceptInvite(code: Int): ConnectionInfo {
-        return emit("acceptInvite",
-            code,
-            onResponse = { response -> ConnectionInfo.fromJson(response) })
+        return ConnectionInfo.fromJson(
+            emit(
+                "acceptInvite",
+                code
+            )
+        )
     }
 
     suspend fun createMobileSendTransport(roomId: Int, userId: Int): SendTransportInfo {
-        return emit(
-            "createMobileSendTransport",
-            roomId,
-            userId,
-            onResponse = { response -> SendTransportInfo.fromJson(response) })
+        return SendTransportInfo.fromJson(
+            emit(
+                "createMobileSendTransport",
+                roomId,
+                userId
+            )
+        )
     }
 
     suspend fun connectTransport(
@@ -73,14 +82,15 @@ internal class SocketPairingDataSource @Inject constructor() {
         userId: Int,
         transportId: String,
         dtlsParameters: String
-    ) {
-        return emit("connectTransport",
+    ): Boolean {
+        return emit(
+            "connectTransport",
             roomId,
             userId,
             transportId,
             dtlsParameters,
-            "",
-            onResponse = { })
+            ""
+        )
     }
 
     suspend fun sendTransport(
@@ -88,7 +98,8 @@ internal class SocketPairingDataSource @Inject constructor() {
         userId: Int,
         transportId: String,
         rtpParameters: String
-    ): String = emit("sendTransport",
+    ): String = emit(
+        "sendTransport",
         roomId,
         userId,
         transportId,
@@ -96,6 +107,6 @@ internal class SocketPairingDataSource @Inject constructor() {
         "Mobile",
         "audio",
         rtpParameters,
-        "",
-        onResponse = { response -> response.getString("id") })
+        ""
+    )
 }
